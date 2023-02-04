@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/workspaces/codespaces-blank/TwoPhaseCommit/TwoPhaseCommit.csproj",
-      "projectName": "TwoPhaseCommit",
-      "projectPath": "/workspaces/codespaces-blank/TwoPhaseCommit/TwoPhaseCommit.csproj",
+      "projectUniqueName": "/workspaces/codespaces-blank/StoreService/StoreService.csproj",
+      "projectName": "StoreService",
+      "projectPath": "/workspaces/codespaces-blank/StoreService/StoreService.csproj",
       "packagesPath": "/home/codespace/.nuget/packages/",
-      "outputPath": "/workspaces/codespaces-blank/TwoPhaseCommit/obj/",
+      "outputPath": "/workspaces/codespaces-blank/StoreService/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/home/codespace/.nuget/NuGet/NuGet.Config"
