@@ -36,7 +36,7 @@ internal class Program
 
             try
             {
-                var cnx = new MySql.Data.MySqlClient.MySqlConnection(config.GetConnectionString("MyDatabase"));
+                var cnx = new MySql.Data.MySqlClient.MySqlConnection(config.GetConnectionString("DefaultConnection"));
                 var evolve = new Evolve(cnx)
                 {
                     Locations = new[] { location },
