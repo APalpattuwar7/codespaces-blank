@@ -14,6 +14,13 @@ public class DeliveryRepository
 
     internal object BookAgent()
     {
-        throw new NotImplementedException();
+        using var con = new MySqlConnection(ConnectionString);
+        con.Open();
+
+        using var cmd = new MySqlCommand();
+        cmd.Connection = con;
+
+        cmd.CommandText = "DROP TABLE IF EXISTS cars";
+        cmd.ExecuteNonQuery();
     }
 }
