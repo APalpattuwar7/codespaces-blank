@@ -1172,25 +1172,27 @@
     ]
   },
   "packageFolders": {
-    "/home/codespace/.nuget/packages/": {}
+    "/Users/adityapalpattuwar/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/workspaces/codespaces-blank/DeliveryService/DeliveryService.csproj",
+      "projectUniqueName": "/Users/adityapalpattuwar/Projects/personal/two-phase-commit-protocol/DeliveryService/DeliveryService.csproj",
       "projectName": "DeliveryService",
-      "projectPath": "/workspaces/codespaces-blank/DeliveryService/DeliveryService.csproj",
-      "packagesPath": "/home/codespace/.nuget/packages/",
-      "outputPath": "/workspaces/codespaces-blank/DeliveryService/obj/",
+      "projectPath": "/Users/adityapalpattuwar/Projects/personal/two-phase-commit-protocol/DeliveryService/DeliveryService.csproj",
+      "packagesPath": "/Users/adityapalpattuwar/.nuget/packages/",
+      "outputPath": "/Users/adityapalpattuwar/Projects/personal/two-phase-commit-protocol/DeliveryService/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/codespace/.nuget/NuGet/NuGet.Config"
+        "/Users/adityapalpattuwar/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net7.0"
       ],
       "sources": {
-        "https://api.nuget.org/v3/index.json": {}
+        "https://api.nuget.org/v3/index.json": {},
+        "https://pkgs.dev.azure.com/DownerDBot/_packaging/DownerDBot/nuget/v3/index.json": {},
+        "https://pkgs.dev.azure.com/ExTrack-Dev/ExTrack.Shared/_packaging/Extrack_Feed/nuget/v3/index.json": {}
       },
       "frameworks": {
         "net7.0": {
@@ -1236,7 +1238,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/dotnet/7.0.102/sdk/7.0.102/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/Users/adityapalpattuwar/.vscode-dotnet-sdk/.dotnet/sdk/7.0.100/RuntimeIdentifierGraph.json"
       }
     }
   }
