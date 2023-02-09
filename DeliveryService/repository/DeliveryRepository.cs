@@ -1,3 +1,6 @@
+using MySql.Data;
+using MySql.Data.MySqlClient;
+
 public class DeliveryRepository
 {
     public string? ConnectionString { get; set; }     
@@ -9,7 +12,22 @@ public class DeliveryRepository
 
     internal string ReserveAgent()
     {
-        return ConnectionString;
+        using var con = new MySqlConnection(ConnectionString);
+        con.Open();
+
+        using var cmd = new MySqlCommand();
+        cmd.Connection = con;
+
+        cmd.CommandText = "SELECT * FROM agents";
+        MySqlDataReader rdr = cmd.ExecuteReader();
+
+        while (rdr.Read())
+        {
+            Console.WriteLine(rdr[0]+" -- "+rdr[1]);
+        }
+        rdr.Close();
+
+        return "";
     }
 
     internal object BookAgent()
@@ -20,7 +38,15 @@ public class DeliveryRepository
         using var cmd = new MySqlCommand();
         cmd.Connection = con;
 
-        cmd.CommandText = "DROP TABLE IF EXISTS cars";
-        cmd.ExecuteNonQuery();
+        cmd.CommandText = "SELECT * FROM agents";
+        MySqlDataReader rdr = cmd.ExecuteReader();
+
+        while (rdr.Read())
+        {
+            Console.WriteLine(rdr[0]+" -- "+rdr[1]);
+        }
+        rdr.Close();
+
+        return null;
     }
 }
