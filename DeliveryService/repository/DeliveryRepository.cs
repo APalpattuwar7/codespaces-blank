@@ -12,41 +12,104 @@ public class DeliveryRepository
 
     internal string ReserveAgent()
     {
-        using var con = new MySqlConnection(ConnectionString);
-        con.Open();
-
-        using var cmd = new MySqlCommand();
-        cmd.Connection = con;
-
-        cmd.CommandText = "SELECT * FROM agents";
-        MySqlDataReader rdr = cmd.ExecuteReader();
-
-        while (rdr.Read())
+        MySqlTransaction myTransaction = null;
+        try
         {
-            Console.WriteLine(rdr[0]+" -- "+rdr[1]);
+            using var con = new MySqlConnection(ConnectionString);
+            con.Open();
+
+            using var cmd = new MySqlCommand();
+            myTransaction = con.BeginTransaction();
+    
+            cmd.Connection = con;
+            cmd.Transaction = myTransaction;
+    
+            cmd.CommandText = "SELECT id, is_reserved, order_id FROM agents WHERE is_reserved is false and order_id is null LIMIT 1 FOR UPDATE";
+            MySqlDataReader rdr = cmd.ExecuteReader();
+            int agentId;
+
+            if(rdr == null)
+            {
+                myTransaction.Rollback();
+                return "No delivery agent available";
+            }
+
+            while (rdr.Read())
+            {
+                Console.WriteLine(rdr[0]);
+                agentId = rdr[0];
+            }
+
+            cmd.CommandText = $"UPDATE agents set is_reserved = true where id = {agentId}";
+            MySqlDataReader reader = cmd.ExecuteReader();
+
+            if(reader == null)
+            {
+                myTransaction.Rollback();
+                return "";
+            }
+
+            rdr.Close();
+            myTransaction.Commit();
         }
-        rdr.Close();
+        catch (System.Exception)
+        {
+            myTransaction.Rollback();
+        }
 
         return "";
     }
 
-    internal object BookAgent()
+    internal string BookAgent()
     {
-        using var con = new MySqlConnection(ConnectionString);
-        con.Open();
-
-        using var cmd = new MySqlCommand();
-        cmd.Connection = con;
-
-        cmd.CommandText = "SELECT * FROM agents";
-        MySqlDataReader rdr = cmd.ExecuteReader();
-
-        while (rdr.Read())
+        MySqlTransaction myTransaction = null;
+        try
         {
-            Console.WriteLine(rdr[0]+" -- "+rdr[1]);
-        }
-        rdr.Close();
+            using var con = new MySqlConnection(ConnectionString);
+            con.Open();
 
-        return null;
+            using var cmd = new MySqlCommand();
+            myTransaction = con.BeginTransaction();
+    
+            cmd.Connection = con;
+            cmd.Transaction = myTransaction;
+    
+            cmd.CommandText = "SELECT id, is_reserved, order_id FROM agents WHERE is_reserved is true and order_id is null LIMIT 1 FOR UPDATE";
+            MySqlDataReader rdr = cmd.ExecuteReader();
+            int agentId;
+
+            if(rdr == null)
+            {
+                myTransaction.Rollback();
+                return "No delivery agent available.";
+            }
+
+            while (rdr.Read())
+            {
+                Console.WriteLine(rdr[0]);
+                agentId = rdr[0];
+            }
+
+            Guid orderId = Guid.NewGuid();
+            cmd.CommandText = $"UPDATE agents set is_reserved = false and order_id = {orderId} where id = {agentId}";
+            MySqlDataReader reader = cmd.ExecuteReader();
+
+            if(reader == null)
+            {
+                myTransaction.Rollback();
+                return "";
+            }
+
+            rdr.Close();
+            myTransaction.Commit();
+
+            return "Agent Booked";
+        }
+        catch (System.Exception)
+        {
+            myTransaction.Rollback();
+        }
+
+        return "";
     }
 }
