@@ -1,6 +1,18 @@
-var builder = WebApplication.CreateBuilder(args);
-var app = builder.Build();
+        var builder = WebApplication.CreateBuilder(args);
+        var config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+        builder.Services.AddScoped(provider => config);
+        var app = builder.Build();
 
-app.MapGet("/", () => "Hello World!");
+        StoreRepository repository = new StoreRepository(config);
 
-app.Run();
+        app.MapPost("/store/food/reserve", () =>
+        {
+            return repository.ReserveFood();
+        });
+
+        app.MapPost("/store/food/book", () =>
+        {
+            return repository.BookFood();
+        });
+
+        app.Run();
