@@ -1,6 +1,9 @@
-var builder = WebApplication.CreateBuilder(args);
-var app = builder.Build();
+    var builder = WebApplication.CreateBuilder(args);
+    var config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+    builder.Services.AddScoped(provider => config);
+    var app = builder.Build();
 
-app.MapGet("/", () => "Hello World!");
+    StoreRepository storeRepository = new StoreRepository(config);
+    DeliveryRepository deliveryRepository = new DeliveryRepository(config);
 
-app.Run();
+    app.Run();
