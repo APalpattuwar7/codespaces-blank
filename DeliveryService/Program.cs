@@ -17,9 +17,9 @@ internal class Program
             return repository.ReserveAgent();
         });
 
-        app.MapPost("/delivery/agent/book", () =>
+        app.MapPost("/delivery/agent/book/{orderId}", (string orderId) =>
         {
-            return repository.BookAgent();
+            return repository.BookAgent(orderId);
         });
 
         app.Run();
