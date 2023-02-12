@@ -5,14 +5,14 @@
 
         StoreRepository repository = new StoreRepository(config);
 
-        app.MapPost("/store/food/reserve", () =>
+        app.MapPost("/store/food/reserve/{foodId}", (int foodId) =>
         {
-            return repository.ReserveFood();
+            return repository.ReserveFood(foodId);
         });
 
-        app.MapPost("/store/food/book", () =>
+        app.MapPost("/store/food/book/{orderId}", (string orderId) =>
         {
-            return repository.BookFood();
+            return repository.BookFood(orderId);
         });
 
         app.Run();

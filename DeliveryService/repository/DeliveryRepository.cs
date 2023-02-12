@@ -88,11 +88,12 @@ public class DeliveryRepository : IDeliveryRepository
             }
 
             rdr.Close();
-            cmd.CommandText = $"UPDATE agents set is_reserved = false and order_id = '{orderId}' where id = {agentId}";
+            cmd.CommandText = $"UPDATE agents set is_reserved = false, order_id = '{orderId}' where id = {agentId}";
             MySqlDataReader reader = cmd.ExecuteReader();
 
             if(reader.RecordsAffected == 0)
             {
+                reader.Close();
                 myTransaction.Rollback();
                 return "Unable to book agent.";
             }
@@ -104,6 +105,7 @@ public class DeliveryRepository : IDeliveryRepository
         }
         catch (System.Exception)
         {
+            reader.Close();
             myTransaction.Rollback();
         }
 
