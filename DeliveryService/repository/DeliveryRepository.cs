@@ -57,7 +57,7 @@ public class DeliveryRepository : IDeliveryRepository
             return "No delivery agent available";
         }
 
-        return "Delivery agent reserved.";
+        return "Delivery agent reserved";
     }
 
     public string BookAgent(string orderId)
@@ -79,7 +79,7 @@ public class DeliveryRepository : IDeliveryRepository
             {
                 rdr.Close();
                 myTransaction.Rollback();
-                return "No delivery agent available.";
+                return "Unable to book agent";
             }
 
             while (rdr.Read())
@@ -95,7 +95,7 @@ public class DeliveryRepository : IDeliveryRepository
             {
                 reader.Close();
                 myTransaction.Rollback();
-                return "Unable to book agent.";
+                return "Unable to book agent";
             }
 
             reader.Close();
@@ -105,8 +105,9 @@ public class DeliveryRepository : IDeliveryRepository
         }
         catch (System.Exception)
         {
-            reader.Close();
+            //reader.Close();
             myTransaction.Rollback();
+            return "Unable to book agent";
         }
 
         return "";

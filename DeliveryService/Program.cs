@@ -1,4 +1,5 @@
 using EvolveDb;
+using Microsoft.AspNetCore.Http;
 
 internal class Program
 {
@@ -12,14 +13,16 @@ internal class Program
 
         DeliveryRepository repository = new DeliveryRepository(config);
 
-        app.MapPost("/delivery/agent/reserve", () =>
+        app.MapPost("/delivery/agent/reserve", IResult () =>
         {
-            return repository.ReserveAgent();
+            string response = repository.ReserveAgent();
+            return response == "Delivery agent reserved" ? TypedResults.Ok(response) : TypedResults.Problem(response);
         });
 
-        app.MapPost("/delivery/agent/book/{orderId}", (string orderId) =>
+        app.MapPost("/delivery/agent/book/{orderId}", IResult (string orderId) =>
         {
-            return repository.BookAgent(orderId);
+            string response = repository.BookAgent(orderId);
+            return response == "Agent Booked" ? TypedResults.Ok(response) : TypedResults.Problem(response);
         });
 
         app.Run();
