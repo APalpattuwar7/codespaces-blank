@@ -1,6 +1,6 @@
 public interface IDeliveryRepository
 {
-    public string ReserveAgent();
+    public int ReserveAgent();
 
-    public string BookAgent(string orderId);
+    public int BookAgent(string orderId);
 }

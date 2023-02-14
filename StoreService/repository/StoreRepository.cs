@@ -10,7 +10,7 @@ public class StoreRepository
         ConnectionString = configuration.GetConnectionString("DefaultConnection");
     }
 
-    public string ReserveFood(int foodId)
+    public int ReserveFood(int foodId)
     {
         MySqlTransaction myTransaction = null;
         try
@@ -29,7 +29,8 @@ public class StoreRepository
             {
                 rdr.Close();
                 myTransaction.Rollback();
-                return "No food packet available";
+                Console.WriteLine("No food packet available");
+                return -1;
             }
 
             while (rdr.Read())
@@ -45,7 +46,8 @@ public class StoreRepository
             if(reader.RecordsAffected == 0)
             {
                 myTransaction.Rollback();
-                return "No food packet available";
+                Console.WriteLine("No food packet available");
+                return -1;
             }
 
             reader.Close();
@@ -54,15 +56,18 @@ public class StoreRepository
         catch (System.Exception ex)
         {
             myTransaction.Rollback();
-            return "No food packet available";
+            Console.WriteLine("No food packet available");
+            return -1;
         }
 
-        return "Food packet reserved.";
+        Console.WriteLine("Food packet reserved.");
+        return foodId;
     }
 
-    public string BookFood(string orderId)
+    public int BookFood(string orderId)
     {
         MySqlTransaction myTransaction = null;
+        int packetId = 0;
         try
         {
             using var con = new MySqlConnection(ConnectionString);
@@ -76,13 +81,13 @@ public class StoreRepository
     
             cmd.CommandText = "SELECT id, is_reserved, order_id FROM packets WHERE is_reserved is true and order_id is null LIMIT 1 FOR UPDATE";
             MySqlDataReader rdr = cmd.ExecuteReader();
-            int packetId = 0;
-
+        
             if(rdr == null)
             {
                 rdr.Close();
                 myTransaction.Rollback();
-                return "No food packet available.";
+                Console.WriteLine("No food packet available");
+                return -1;
             }
 
             while (rdr.Read())
@@ -98,20 +103,21 @@ public class StoreRepository
             {
                 reader.Close();
                 myTransaction.Rollback();
-                return "";
+                Console.WriteLine("No food packet available");
+                return -1;
             }
 
             reader.Close();
-            myTransaction.Commit();
-
-            return "Food packet Booked";
+            myTransaction.Commit();    
         }
         catch (System.Exception)
         {
             myTransaction.Rollback();
+            return -1;
         }
 
-        return "";
+        Console.WriteLine("Food packet Booked");
+        return packetId;
     }
 
     private MySqlCommand CreateMySqlCommand(string query, ref MySqlTransaction myTransaction, MySqlConnection con)

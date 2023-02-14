@@ -6,7 +6,10 @@
     int foodId = 1;
     OrderRepository orderRepository = new OrderRepository();
 
-    var t = Task.Run(() => orderRepository.PlaceOrder(foodId));
+    for(int i = 0; i < 10; i++)
+    {
+        var t = Task.Run(() => orderRepository.PlaceOrder(foodId));
+    }
 
     // for(int i = 0; i < 10; i++)
     // {

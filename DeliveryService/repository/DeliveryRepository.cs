@@ -10,9 +10,10 @@ public class DeliveryRepository : IDeliveryRepository
         ConnectionString = configuration.GetConnectionString("DefaultConnection");
     }
 
-    public string ReserveAgent()
+    public int ReserveAgent()
     {
         MySqlTransaction myTransaction = null;
+        int agentId = 0;
         try
         {
             using var con = new MySqlConnection(ConnectionString);
@@ -23,13 +24,13 @@ public class DeliveryRepository : IDeliveryRepository
                                                   LIMIT 1 
                                                   FOR UPDATE", ref myTransaction, con);
             MySqlDataReader rdr = cmd.ExecuteReader();
-            int agentId = 0;
-
+            
             if(!rdr.HasRows)
             {
                 rdr.Close();
                 myTransaction.Rollback();
-                return "No delivery agent available";
+                Console.WriteLine("No delivery agent available");
+                return -1;
             }
 
             while (rdr.Read())
@@ -45,7 +46,8 @@ public class DeliveryRepository : IDeliveryRepository
             if(reader.RecordsAffected == 0)
             {
                 myTransaction.Rollback();
-                return "No delivery agent available";
+                Console.WriteLine("No delivery agent available");
+                return -1;
             }
 
             reader.Close();
@@ -54,15 +56,18 @@ public class DeliveryRepository : IDeliveryRepository
         catch (System.Exception ex)
         {
             myTransaction.Rollback();
-            return "No delivery agent available";
+            Console.WriteLine("No delivery agent available");
+            return -1;
         }
 
-        return "Delivery agent reserved";
+        Console.WriteLine("Delivery agent reserved");
+        return agentId;
     }
 
-    public string BookAgent(string orderId)
+    public int BookAgent(string orderId)
     {
         MySqlTransaction myTransaction = null;
+        int agentId = 0;
         try
         {
             using var con = new MySqlConnection(ConnectionString);
@@ -73,13 +78,13 @@ public class DeliveryRepository : IDeliveryRepository
                                                   LIMIT 1 
                                                   FOR UPDATE", ref myTransaction, con);
             MySqlDataReader rdr = cmd.ExecuteReader();
-            int agentId = 0;
-
+            
             if(!rdr.HasRows)
             {
                 rdr.Close();
                 myTransaction.Rollback();
-                return "Unable to book agent";
+                Console.WriteLine("Unable to book agent");
+                return -1;
             }
 
             while (rdr.Read())
@@ -95,22 +100,23 @@ public class DeliveryRepository : IDeliveryRepository
             {
                 reader.Close();
                 myTransaction.Rollback();
-                return "Unable to book agent";
+                Console.WriteLine("Unable to book agent");
+                return -1;
             }
 
             reader.Close();
             myTransaction.Commit();
-
-            return "Agent Booked";
         }
         catch (System.Exception)
         {
             //reader.Close();
             myTransaction.Rollback();
-            return "Unable to book agent";
+            Console.WriteLine("Unable to book agent");
+            return -1;
         }
 
-        return "";
+        Console.WriteLine("Agent Booked");
+        return agentId;
     }
 
     private MySqlCommand CreateMySqlCommand(string query, ref MySqlTransaction myTransaction, MySqlConnection con)
