@@ -14,16 +14,16 @@ internal class Program
 
         DeliveryRepository repository = new DeliveryRepository(config);
 
-        app.MapPost("/delivery/agent/reserve", Results<Ok, Problem> () =>
+        app.MapPost("/delivery/agent/reserve", IResult () =>
         {
             int response = repository.ReserveAgent();
-            return response != -1 ? TypedResults.Ok(response) : TypedResults.Problem(response);
+            return response != -1 ? TypedResults.Ok<int>(response) : TypedResults.StatusCode(500);
         });
 
-        app.MapPost("/delivery/agent/book/{orderId}", Results<Ok<int>, Problem> (string orderId) =>
+        app.MapPost("/delivery/agent/book/{orderId}", IResult (string orderId) =>
         {
             int response = repository.BookAgent(orderId);
-            return response != -1 ? TypedResults.Ok(response) : TypedResults.Problem(response);
+            return response != -1 ? TypedResults.Ok<int>(response) : TypedResults.StatusCode(500);
         });
 
         app.Run();
